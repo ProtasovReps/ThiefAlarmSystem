@@ -1,40 +1,30 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class AlarmSystem : MonoBehaviour
 {
     [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private float _volumeChangeSpeed;
 
-    private void OnTriggerEnter(Collider other)
+    private float _maxVolume = 1f;
+    private float _minVolume = 0f;
+
+    public void IncreaseVolume()
     {
-        if (other.TryGetComponent<Thief>(out _))
-            StartCoroutine(IncreaseAlarmVolume());
+        StartCoroutine(ChangeAlarmVolume(_volumeChangeSpeed, _maxVolume));
     }
 
-    private void OnTriggerExit(Collider other)
+    public void DecreaseVolume() 
     {
-        if (other.TryGetComponent<Thief>(out _))
-            StartCoroutine(DecreaseAlarmVolume());
+        StartCoroutine(ChangeAlarmVolume(-_volumeChangeSpeed, _minVolume));
     }
 
-    private IEnumerator IncreaseAlarmVolume()
+    private IEnumerator ChangeAlarmVolume(float volumeChangeSpeed, float targetVolume)
     {
-        float step = 0.001f;
-
-        while (_audioSource.volume != _audioSource.maxDistance)
+        while (_audioSource.volume != targetVolume)
         {
-            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, _audioSource.maxDistance, step);
-            yield return null;
-        }
-    }
-
-    private IEnumerator DecreaseAlarmVolume()
-    {
-        float step = -0.001f;
-
-        while (_audioSource.volume != _audioSource.minDistance)
-        {
-            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, _audioSource.minDistance, step);
+            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, _audioSource.maxDistance, volumeChangeSpeed);
             yield return null;
         }
     }
