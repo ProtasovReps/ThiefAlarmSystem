@@ -9,7 +9,7 @@ public class AlarmSystem : MonoBehaviour
     private float _maxVolume = 1f;
     private float _minVolume = 0f;
 
-    public void ChangeVolume(bool isEnter)
+    public void Restart(bool isEnter)
     {
         StopAllCoroutines();
         StartCoroutine(ChangeVolumeSmoothly(isEnter));
