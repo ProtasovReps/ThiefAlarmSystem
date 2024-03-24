@@ -1,27 +1,31 @@
 using System.Collections;
-using TMPro;
 using UnityEngine;
 
 public class AlarmSystem : MonoBehaviour
 {
     [SerializeField] private AudioSource _audioSource;
-    [SerializeField] private float _volumeChangeSpeed;
-
+    
+    private float _volumeChangeSpeed = 0.001f;
     private float _maxVolume = 1f;
     private float _minVolume = 0f;
 
-    public void IncreaseVolume()
+    public void ChangeVolume(bool isEnter)
     {
-        StartCoroutine(ChangeAlarmVolume(_volumeChangeSpeed, _maxVolume));
+        StopAllCoroutines();
+        StartCoroutine(ChangeVolumeSmoothly(isEnter));
     }
 
-    public void DecreaseVolume() 
+    private IEnumerator ChangeVolumeSmoothly(bool isEnter)
     {
-        StartCoroutine(ChangeAlarmVolume(-_volumeChangeSpeed, _minVolume));
-    }
+        float targetVolume = _maxVolume;
+        float volumeChangeSpeed = _volumeChangeSpeed;
 
-    private IEnumerator ChangeAlarmVolume(float volumeChangeSpeed, float targetVolume)
-    {
+        if (isEnter == false)
+        {
+            volumeChangeSpeed = -_volumeChangeSpeed;
+            targetVolume = _minVolume;
+        }
+
         while (_audioSource.volume != targetVolume)
         {
             _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, _audioSource.maxDistance, volumeChangeSpeed);
