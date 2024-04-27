@@ -4,15 +4,22 @@ using UnityEngine;
 public class AlarmSystem : MonoBehaviour
 {
     [SerializeField] private AudioSource _audioSource;
-    
+
+    private Coroutine _coroutine;
     private float _volumeChangeSpeed = 0.001f;
     private float _maxVolume = 1f;
     private float _minVolume = 0f;
 
-    public void Restart(bool isEnter)
+    public void Play(bool isEnter)
     {
-        StopAllCoroutines();
-        StartCoroutine(ChangeVolumeSmoothly(isEnter));
+        TryStopVolumeChanging();
+        _coroutine = StartCoroutine(ChangeVolumeSmoothly(isEnter));
+    }
+
+    private void TryStopVolumeChanging()
+    {
+        if (_coroutine != null)
+            StopCoroutine(_coroutine);
     }
 
     private IEnumerator ChangeVolumeSmoothly(bool isEnter)

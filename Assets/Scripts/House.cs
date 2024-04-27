@@ -11,7 +11,7 @@ public class House : MonoBehaviour
         _isEnter = true;
 
         if (other.TryGetComponent<Thief>(out _))
-            _alarmSystem.Restart(_isEnter);
+            _alarmSystem.Play(_isEnter);
     }
 
     private void OnTriggerExit(Collider other)
@@ -19,6 +19,6 @@ public class House : MonoBehaviour
         _isEnter = false;
 
         if (other.TryGetComponent<Thief>(out _))
-            _alarmSystem.Restart(_isEnter);
+            _alarmSystem.Play(_isEnter);
     }
 }
